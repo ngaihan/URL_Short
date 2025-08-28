@@ -1,16 +1,18 @@
+import java.util.Scanner;
+
 public class App {
     public static void main(String[] args) {
-        String userInput;
-        userInput = Helper.getUserInput();
+        String response;
+        Scanner scanner = new Scanner(System.in);
             
-        while (userInput != null) {
-            String shortURL;
-            shortURL = Helper.generateShortURL();
-            
-            Helper.insertURL(shortURL, userInput);
+        do {
+            response = Helper.handleInput(scanner);
+            System.out.println(response);
+        } while (!response.equals("exit"));
 
-            userInput = Helper.getUserInput();
-        }
+        scanner.close();
+
+        System.out.println("Application exitted gracefully");
     }
 }
 

@@ -2,8 +2,6 @@ import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Random;
 
-
-
 public class Helper {
     public static final int SHORT_LENGTH = 12;
     public static final String POSSIBLE_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -11,49 +9,46 @@ public class Helper {
 
     private static HashMap<String, String> urlMap = new HashMap<>();
 
-    public static String getUserInput() {
-        Scanner scanner = new Scanner(System.in);
+    public static String handleInput(Scanner scanner) {
+        String response;
+
         System.out.print("1 to shorten URL\n2 to get long URL from short\nq to quit\n> ");
         String input = scanner.nextLine();
-        String response;
-        
+
         if (input.equals("1")) {
             System.out.print("Enter URL to shorten\n> ");
             input = scanner.nextLine();
 
             if (input.equals("q")) {
-                scanner.close();
-                return null;
+                response = "exit";
             }
+            else {
+                String shortURL = generateShortURL();
+                insertURL(shortURL, input);
 
-            String shortURL = generateShortURL();
-            insertURL(shortURL, input);
-
-            response = shortURL;
+                response = shortURL;
+            }
         }
 
         else if (input.equals("2")) {
-            System.out.print("Enter long URL\n> ");
+            System.out.print("Enter short URL\n> ");
             input = scanner.nextLine();
 
             if (input.equals("q")) {
-                scanner.close();
-                return null;
+                response = "exit";
             }
-
-            response = getURL(input);
+            else {
+                response = getURL(input);
+            }
         }
 
         else if (input.equals("q")) {
-            scanner.close();
-            return null;
+            response = "exit";
         }
 
         else {
             response = "Input not recognized\n";
         }
-
-        scanner.close();
 
         return response;
     }
@@ -67,13 +62,14 @@ public class Helper {
         while (isInHash) {
             isInHash = false;
 
-            for (int i=0; i<SHORT_LENGTH; i++) {
+            for (int i = 0; i < SHORT_LENGTH; i++) {
                 newURLsb.append(POSSIBLE_CHARS.charAt(rand.nextInt(POSSIBLE_CHARS_LEN)));
             }
 
             newURL = newURLsb.toString();
 
-            if (urlMap.get(newURL) != null) isInHash = true;
+            if (urlMap.get(newURL) != null)
+                isInHash = true;
         }
 
         if (newURL == null) {
@@ -91,12 +87,9 @@ public class Helper {
         String longURL = urlMap.get(shortURL);
 
         if (longURL == null) {
-            System.err.println("Error: URL not found");
+            return "Error: URL not found";
         }
 
         return longURL;
     }
 }
-
-
-
